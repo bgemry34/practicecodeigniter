@@ -24,6 +24,7 @@
 
 		public function create(){
 			$data['title'] = 'Create Post';
+			$data['categories'] = $this->post_model->get_categories();
 
 			$this->form_validation->set_rules('title', 'Title', 'required');
 			$this->form_validation->set_rules('body', 'Body', 'required');
@@ -34,7 +35,27 @@
             $this->load->view('templates/footer'); 
 			}
 			else{
-				$this->post_model->create_post();
+				//upload image
+				$config['upload_path'] = './assets/images/posts';
+				$config['allowed_types'] = 'gif|jpg|png';
+				$config['max_size'] = '2048';
+				$path_parts = pathinfo($_FILES["userfile"]["name"]);
+				$post_image = $path_parts['filename'].'_'.time().'.'.$path_parts['extension'];
+				$config['file_name'] = $post_image;
+
+				$this->load->library('upload', $config);
+
+				if(!$this->upload->do_upload()){
+					$errors=array('error' => $this->upload->display_errors());
+					$post_image='noimage.jpeg';
+				}else{
+					//problem uploading still not changed by time in the end of
+					//filename so even if the filename is same still can upload due to its uniqueness of time
+					//problem unsolved
+					$data = array('upload_data' => $this->upload->data());
+				}
+
+				$this->post_model->create_post($post_image);
 				header("location: ".base_url()."posts");
 			}
 		}
@@ -46,6 +67,8 @@
 
 		public function edit($slug){
 			$data['post'] = $this->post_model->get_posts($slug);
+			$data['categories'] = $this->post_model->get_categories();
+
 
 			if(empty($data['post'])){
 				show_404();

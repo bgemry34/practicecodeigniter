@@ -1,5 +1,6 @@
 <h2><?=$post['title']?></h2>
 <small>Posted on: <?=$post['created_at'];?></small><br><br>
+<img class="post_img" src="<?=site_url();?>assets/images/posts/<?=$post['post_image'];?>">
 <p><?=$post['body'];?></p>
 
 <hr>
@@ -10,4 +11,3 @@
 </div>
 
 <a href="<?=base_url().'posts/edit/'.$post['slug'];?>" class="btn btn-default pull-right">Edit</a>
-

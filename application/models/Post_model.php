@@ -4,9 +4,11 @@
 			$this->load->database();
 		}
 
+		//getting posts
 		public function get_posts($slug = FALSE){
 			if($slug === FALSE){
-				$this->db->order_by('id', 'DESC');
+				$this->db->order_by('posts.id', 'DESC');
+				$this->db->join('categories', 'posts.category_id=categories.id');
 				$query = $this->db->get('posts');
 				return $query->result_array();
 			}
@@ -14,32 +16,53 @@
 				return $query->row_array();
 		}
 
-		public function create_post(){
+		//creating post
+		public function create_post($post_image){
 			$slug = url_title($this->input->post('title'));
 			$data = array(
 				'title' => $this->input->post('title'),
 				'slug' => $slug,
-				'body' => $this->input->post('body')
+				'body' => $this->input->post('body'),
+				'category_id' => $this->input->post('category'),
+				'post_image' => $post_image 
 			);
 
 			return $this->db->insert('posts', $data);
 		}
 
+		//to delete post
 		public function delete_post($id){
 			$this->db->where('id', $id);
 			$this->db->delete('posts');
 			return true;
 		}
 
+		//to update post
 		public function update_post(){
 			$slug = url_title($this->input->post('title'));
 			$data = array(
 				'title' => $this->input->post('title'),
 				'slug' => $slug,
-				'body' => $this->input->post('body')
+				'body' => $this->input->post('body'),
+				'category_id' => $this->input->post('category')
 			);
 
 			$this->db->where('id', $this->input->post('id'));
 			return $this->db->update('posts', $data);
 		}
+
+		//getting category
+		public function get_categories(){
+			$this->db->order_by('name');
+			$query=$this->db->get('categories');
+			return $query->result_array();
+		}
+
+		public function get_posts_by_category($id){
+			$this->db->order_by('posts.id', 'DESC');
+			$this->db->join('categories', 'posts.category_id=categories.id');
+			$query = $this->db->get_where('posts', array('category_id' => $id));
+			return $query->result_array();
+		}
 	}
+ 
