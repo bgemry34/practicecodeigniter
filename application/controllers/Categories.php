@@ -20,6 +20,11 @@
 				$this->load->view('templates/footer');
 			}else{
 				$this->category_model->create_category();
+
+				//set message
+				$this->session->set_flashdata('category_created', 'Your Category has been created!');
+
+
 				redirect('categories');
 			}
 		}

@@ -4,14 +4,16 @@
 <p><?=$post['body'];?></p>
 
 <hr>
-<div style="display: inline-block">
+
+<?php if($this->session->userdata('user_id') == $post['user_id']):?>
 <?=form_open('/posts/delete/'.$post['id']);?>
-	 <input type="submit" value="Delete" class="btn btn-danger">
+	 <input type="submit" value="Delete" class="btn btn-danger pull-left">
 </form>
-</div>
 
 <a href="<?=base_url().'posts/edit/'.$post['slug'];?>" class="btn btn-default pull-right">Edit</a>
-<br><hr style="background-color: black;height: 1px;">
+<br><br><hr style="background-color: black;height: 1px;">
+<?php endif;?>
+
 <h3>Comments</h3>
 <hr style="background-color: black;height: 1px;">
 <?php if($comments):?>

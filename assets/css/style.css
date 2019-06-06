@@ -2,3 +2,17 @@
 	display:block; margin-left: auto; margin-right:auto;
 	max-width: 800; max-height: 600;
 }
+
+.pagination-links{
+	margin:30px 0;
+}
+
+a.pagination-link{
+	padding: 8px 13px;
+	margin: 5px;
+	background: #f4f4f4;
+	border: 1.5px solid #ccc; 
+	text-decoration: none;
+	font-weight: bolder;
+}
+
